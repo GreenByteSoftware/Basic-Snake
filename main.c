@@ -6,8 +6,8 @@
 #include <poll.h>
 #include <fcntl.h>
 
-#define SIZE_X 15
-#define SIZE_Y 10
+#define SIZE_X 65
+#define SIZE_Y 40
 
 #define clear_console() printf("\033[H\033[J")
 #define ngetc(c) read(0, c, 1)
@@ -60,10 +60,14 @@ int tick()
 
   counter++;
 
-  if (x < 0 || x >= SIZE_X)
-    return 0;
-  if (y < 0 || y >= SIZE_Y)
-    return 0;
+  if (x < 0)
+    x = SIZE_X - 1;
+  if (x >= SIZE_X)
+    x = 0;
+  if (y < 0)
+    y = SIZE_Y - 1;
+  if (y >= SIZE_Y)
+    y = 0;
 
   if (area[x][y] > 0 && area[x][y] >= counter - size)
     return 0;
@@ -158,6 +162,9 @@ int main()
   clear();
 
   spawn_food();
+  spawn_food();
+  spawn_food();
+  spawn_food();
 
   while (1)
   {
@@ -166,7 +173,7 @@ int main()
     if (!tick())
       break;
     draw();
-    usleep(200*1000);
+    usleep(100*1000);
   }
 
   return 0;
